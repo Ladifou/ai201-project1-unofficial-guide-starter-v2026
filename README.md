@@ -21,6 +21,8 @@
 
 ## What This Does
 
+This project implements a RAG (Retrieval Augmented Generator) that would answer user questions based on documents provided. It was accomplish by implementing a pipeline that loads documents on city_guides corpus, chuncks each documents into paragraphes, and embeds text. It querys a vector store and returns relevant results that are based on documents provided. To ensure the validity and relevance of the results, some acceptance criteria where implemented to name desirable targets to aim for.
+
 <!-- Three or four sentences. Which corpus you picked, and the kinds of
      questions your system answers. Write it for someone who has never seen
      this repo.
@@ -29,8 +31,10 @@
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** 350
+**Overlap:** 120
+
+The documents in the city_guides corpus were organized into small paragraphes of about 100-450 characters. So a number like in the 300s sounds reasonable with an overlap of about 120.
 
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
@@ -53,29 +57,48 @@
 
      Milestone 3. -->
 
-**Chunk 1** — source: `` — produced by: ``
+**Chunk 1** — source: guide_accessibility.md#0 `— produced by: chunker.py::split_documents`
 
 ```
+# Getting around the region with limited mobility
+
+An honest assessment rather than a promotional one. Some of these places are
+difficult and it is better to know in advance.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: guide_corry_vale.md#3 `— produced by: chunker.py::split_documents`
 
 ```
+## Eat and drink
+
+One pub in the largest village serves food seven days a week. A second, in the third village, opens Thursday to Sunday. There is a farm shop at the valley mouth that sells bread, cheese and little else, and it closes at 4pm. Bring supplies; this is not a place with options.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: guide_givens_mill.md#2 `— produced by: chunker.py::split_documents`
 
 ```
+## Getting around
+
+Everything is on one street along the river. The mill is at one end and the church at the other, eight minutes apart. The riverside path continues in both directions for as far as you want to walk.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: guide_marchwood.md#0 `— produced by: chunker.py::split_documents`
 
 ```
+# Marchwood
+
+Marchwood is the regional hub — 180,000 people, the junction everyone changes trains at, and a city most visitors pass through rather than stop in. That is a mistake, though an understandable one, since almost nothing of interest is near the station.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: guide_regional_transport.md#6 `— produced by: chunker.py::split_documents`
 
 ```
+## Walking and cycling
+
+The river path from Brightwater runs four miles upstream on a good surface. The
+old railway trackbed from Kestrelford runs six miles on an easy gradient and is
+the best walking in the region for the effort involved. The coastal path from
+Halden Bay is more serious — exposed, and closed in high wind.
 ```
 
 ## Sample Answer
@@ -83,14 +106,16 @@
 <!-- One complete question and answer, pasted as text, with the source line
      visible. Milestone 4. -->
 
-**Question:**
+**Question:** "What mode of transportation are available in Kestrelford?"
 
 **Answer:**
 
 ```
+Transportation options available in Kestrelford include driving and buses (which run hourly on weekdays and every two hours on Saturdays, but do not run on Sundays), while walking is also used for getting around the town since there is no local bus service.
 ```
 
-**My relevance cutoff:**
+**My relevance cutoff:** 0.6
+The default worked well for me because most questions i asked had a distance between 0.44-0.63. Often some question bellow the cutoff would also fail to return an answer.
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -101,9 +126,18 @@
 
      Milestone 4. -->
 
-| Question | In corpus? | Best distance |
-|---|---|---|
-|  |  |  |
+| Question                                                          | In corpus? | Best distance |
+| ----------------------------------------------------------------- | ---------- | ------------- |
+| What is the capital of Mongolia?                                  | no         | 0.887         |
+| How do I change the oil in a diesel engine?                       | no         | 0.897         |
+| Who won the 1994 World Cup?                                       | no         | 0.903         |
+| What is the recommended dosage of ibuprofen for a headache?       | no         | 0.829         |
+| How do I write a for loop in Rust?                                | no         | 0.853         |
+| Which city is the easiest to navigate?                            | yes        | 0.568         |
+| What details should visitors lookout for eating out?              | yes        | 0.531         |
+| How is the weather during summer?                                 | yes        | 0.635         |
+| Are certain neighborhoods experiencing high parking lots demands? | yes        | 0.585         |
+| What mode of transportation are available in Kestrelford?         | yes        | 0.442         |
 
 ## How I Used AI
 
@@ -116,9 +150,10 @@
 
      Milestone 5. -->
 
-**1.**
+**1.** I used AI to help code the document splitter function into paragraph. This worked well to decrease development time while focusing on making sure the overall system worked as intended. I asked it to include headers as part of the paragraph right after them. Although AI was responsible for implementing code review and testing was still necessary to make sure that the code worked as intended.
 
-**2.**
+**2.** AI was also used to brainstorm criterion and questions to ask and how to test them. I used it to evaluate and critique some of my choices.
+It was also really great at pointing in the right direction when testing for a specific criterion.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
@@ -145,13 +180,13 @@
 
      Milestone 1. -->
 
-| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
-|---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| Criterion                              | Target | Run 1 | Run 2 | Run 3 | Verdict |
+| -------------------------------------- | ------ | ----- | ----- | ----- | ------- |
+| 1. Retrieved chunk contains the answer | 4 of 5 |       |       |       |         |
+| 2. Every answer names a source         | 5 of 5 |       |       |       |         |
+| 3. Gate stops out-of-corpus questions  | 4 of 5 |       |       |       |         |
+| 4.                                     |        |       |       |       |         |
+| 5.                                     |        |       |       |       |         |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
@@ -168,13 +203,13 @@
 
      Milestone 2. -->
 
-| # | Criterion | Verdict | How I decided |
-|---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| #   | Criterion | Verdict | How I decided |
+| --- | --------- | ------- | ------------- |
+| 1   |           |         |               |
+| 2   |           |         |               |
+| 3   |           |         |               |
+| 4   |           |         |               |
+| 5   |           |         |               |
 
 ## Diagnoses
 
@@ -210,13 +245,13 @@
 <!-- Same format, same five criteria, three runs each.
      `python run_eval.py --label after` -->
 
-| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
-|---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| Criterion                              | Target | Run 1 | Run 2 | Run 3 | Verdict |
+| -------------------------------------- | ------ | ----- | ----- | ----- | ------- |
+| 1. Retrieved chunk contains the answer | 4 of 5 |       |       |       |         |
+| 2. Every answer names a source         | 5 of 5 |       |       |       |         |
+| 3. Gate stops out-of-corpus questions  | 4 of 5 |       |       |       |         |
+| 4.                                     |        |       |       |       |         |
+| 5.                                     |        |       |       |       |         |
 
 **Did it help?**
 
