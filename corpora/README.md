@@ -123,6 +123,9 @@ Sources retrieved: guide_eating.md, guide_elder_ness.md, guide_halden_bay.md, gu
 
 ## What this does
 
+This project implements a RAG (Retrieval Augmented Generator) that would answer user questions based on documents provided. It was accomplish by implementing a pipeline that loads documents on city_guides, chuncks each documents into paragraphes, and embeds text. It querys a vector store and returns relevant results that are based on documents provided. To ensure the validity and relevance of the results, some acceptance criteria where implemented to name desirable targets to aim for.
+
 ## How I used AI
 
-I used AI to help code the document splitter function into paragraph. This worked well to decrease development time while focusing on making sure the overall system worked as intended
+I used AI to help code the document splitter function into paragraph. This worked well to decrease development time while focusing on making sure the overall system worked as intended. Although AI was responsible for implementing code review and testing was still necessary to make sure that the code worked as intended.
+AI was also used to brainstorm criterion and questions to ask and how to test them.
