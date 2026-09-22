@@ -107,3 +107,22 @@ old railway trackbed from Kestrelford runs six miles on an easy gradient and is
 the best walking in the region for the effort involved. The coastal path from
 Halden Bay is more serious — exposed, and closed in high wind.
 ```
+
+## Sample Answer
+
+```
+(.venv) PS F:\CODEPATHAI201\ai201-project1-unofficial-guide-starter-v2026> python app.py ask "What details should visitors lookout for eating out?"
+  (best distance 0.531, cutoff 0.6)
+
+Based on the provided documents, visitors should know that kitchens across the region stop serving at 9 pm (guide_eating.md). Additionally, the good cooking is typically found one street back from the visitors (for example, Corry Lane in Brightwater, Fell Street in Halden Bay, and Marine Terrace in Pellew Sands offer better prices or food than the immediate waterfronts) (guide_eating.md).
+
+Sources retrieved: guide_eating.md, guide_elder_ness.md, guide_halden_bay.md, guide_kestrelford.md
+
+1 model calls this session, 1142 tokens (1058 in, 84 out)
+```
+
+## What this does
+
+## How I used AI
+
+I used AI to help code the document splitter function into paragraph. This worked well to decrease development time while focusing on making sure the overall system worked as intended
