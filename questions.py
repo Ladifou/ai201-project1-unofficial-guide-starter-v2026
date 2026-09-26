@@ -23,7 +23,7 @@ names a target of "4 of 5", and four of three is not a thing.
 
 QUESTIONS = [
     # {"question": "...", "expects": "..."},
-    {"question": "Which city is the easiest to navigate?", "expects": "easy to navigate"},
+    {"question": "Which city is the easiest to navigate?", "expects": "easiest city to navigate"},
     {"question": "What details should visitors lookout for eating out?", "expects": "opening hours, patterns, and markets"},
     {"question": "How is the weather during summer?", "expects": "timeframe and summary of the weather during summer"},
     {"question": "Are certain neighborhoods experiencing high parking lots demands?", "expects": "parking lots demands"},

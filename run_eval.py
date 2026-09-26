@@ -113,6 +113,7 @@ def main():
                 question, top_k, threshold, corpus, args.variant
             )
             passed = judge(question, expects, answer, results) if judge else None
+        
             run_results.append(passed)
 
             mark = {True: "pass", False: "fail", None: "—"}[passed]
